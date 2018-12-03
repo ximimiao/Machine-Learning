@@ -21,7 +21,7 @@ def createdataset():
                [2, 1, 0, 1, 'yes'],
                [2, 1, 0, 2, 'yes'],
                [2, 0, 0, 0, 'no']]
-    labels = ['不放贷', '放贷']
+    labels = ['年龄', '有工作', '有自己的房子', '信贷情况']
     return dataSet, labels
 
 def calEntrioy(dataset):
@@ -91,9 +91,14 @@ def majorityCnt(classlist):
     return sortedclasscount[0][0]
 
 def createTree(dataset,labels,featlabels):
+
     """
     ID3算法
     创建决策树
+    :param dataset:数据集
+    :param labels: 分类属性标签
+    :param featlabels:存储选择的最优标签特征
+    :return:
     """
     classlist = [example[-1] for example in dataset]
     # 类别相同，停止划分
@@ -102,6 +107,27 @@ def createTree(dataset,labels,featlabels):
     # 遍历完所有特征时，返回出现次数最多的
     if len(classlist)==1 or len(labels) == 0:
         majorityCnt(classlist)
+    #选择最优特征索引
+    bestFeat = calgain(dataset)
+    # 最优标签
+    bestFeatLabels = labels[bestFeat]
+    featlabels.append(bestFeatLabels)
+    Mytree = {bestFeatLabels:{}}
+    # 删除已经使用标签
+    del(labels[bestFeat])
+    # 得到训练集中所有最优特征的值
+    featvalues = [example[bestFeat] for example in dataset]
+    # 去掉重复值
+    uniquefeat = set(featvalues)
+    #遍历特征，创建决策树
+    for vec in uniquefeat:
+        Mytree[bestFeatLabels][vec] = createTree(splitdata(dataset,bestFeat,value=vec),
+                                                 labels,featlabels)
+    return Mytree
+
+
+
+
 
 
 
@@ -111,4 +137,6 @@ def createTree(dataset,labels,featlabels):
 
 if __name__ =='__main__':
     data,label = createdataset()
-    print(calgain(data))
+    featlabels= []
+    tree = createTree(data,label,featlabels)
+    print(tree)
