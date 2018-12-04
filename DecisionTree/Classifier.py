@@ -127,7 +127,27 @@ def createTree(dataset,labels,featlabels):
 
 
 
-
+def classify(inputTree,featlabels,testvec):
+    """
+    使用决策树分类
+    :param inputTree:
+    :param featlabels:
+    :param testvec:
+    :return:
+    """
+    # 获取决策树结点
+    firstStr = next(iter(inputTree))
+    print(firstStr)
+    # 下一个字典
+    secondDict = inputTree[firstStr]
+    featIndex = featlabels.index(firstStr)
+    for key in secondDict.keys():
+        if testvec[featIndex] == key:
+            if type(secondDict[key]).__name__ == 'dict':
+                classLabel = classify(secondDict[key], featlabels, testvec)
+            else:
+                classLabel = secondDict[key]
+    return classLabel
 
 
 
@@ -139,4 +159,9 @@ if __name__ =='__main__':
     data,label = createdataset()
     featlabels= []
     tree = createTree(data,label,featlabels)
-    print(tree)
+    testVec = [0, 1]  # 测试数据
+    result = classify(tree, featlabels, testVec)
+    if result == 'yes':
+        print('放贷')
+    if result == 'no':
+        print('不放贷')
