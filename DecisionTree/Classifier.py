@@ -1,5 +1,6 @@
 from math import log
 import operator
+import pickle
 
 def createdataset():
     """
@@ -145,8 +146,19 @@ def classify(inputTree,featlabels,testvec):
                 classLabel = secondDict[key]
     return classLabel
 
+def storeTree(inputTree,filename):
+    """
+    存储决策树
+    :param inputTree:
+    :param filename:
+    :return:
+    """
+    with open(filename,'wb') as fw:
+        pickle.dump(inputTree,fw)
 
-
+def getTree(filename):
+    fr = open(filename,'rb')
+    return pickle.load(fr)
 
 
 
@@ -154,10 +166,5 @@ def classify(inputTree,featlabels,testvec):
 if __name__ =='__main__':
     data,label = createdataset()
     featlabels= []
-    tree = createTree(data,label,featlabels)
-    testVec = [0, 1]  # 测试数据
-    result = classify(tree, featlabels, testVec)
-    if result == 'yes':
-        print('放贷')
-    if result == 'no':
-        print('不放贷')
+    tree = getTree('tree.txt')
+    print(tree)
