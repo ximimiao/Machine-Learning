@@ -130,10 +130,6 @@ def createTree(dataset,labels,featlabels):
 def classify(inputTree,featlabels,testvec):
     """
     使用决策树分类
-    :param inputTree:
-    :param featlabels:
-    :param testvec:
-    :return:
     """
     # 获取决策树结点
     firstStr = next(iter(inputTree))
