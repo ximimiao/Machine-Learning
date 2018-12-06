@@ -74,6 +74,7 @@ def wordsdict(all_words_list,deletN,stopwordsset = set()):
             feature_words.append(all_words_list[t])
         n+=1
     return feature_words
+
 def TextClassifier(trian_feature_list,test_feature_list,train_class_list,test_class_list):
     nb = MultinomialNB()
     nb.fit(trian_feature_list,train_class_list)
