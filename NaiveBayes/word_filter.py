@@ -73,15 +73,14 @@ def trainNB(data,label):
         if label[i]==0:
             p0num += data[i]
             p0Denom += sum(data[i])
-    p1vec = p1num/p1Denom
-    p0vec = p0num/p0Denom
+    p1vec = np.log(p1num/p1Denom)
+    p0vec = np.log(p0num/p0Denom)
 
     return pAusice,p0vec,p1vec
 
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
-
-     p1 = reduce(lambda x,y:x*y, vec2Classify * p1Vec) * pClass1     #对应元素相乘
-     p0 = reduce(lambda x,y:x*y, vec2Classify * p0Vec) * (1.0 - pClass1)
+     p1 = sum(vec2Classify * p1Vec) + np.log(pClass1)  # 对应元素相乘。logA * B = logA + logB，所以这里加上log(pClass1)
+     p0 = sum(vec2Classify * p0Vec) + np.log(1.0 - pClass1)
      print('p0:',p0)
      print('p1:',p1)
      if p1.any() > p0.any():
