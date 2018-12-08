@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 def loaddata():
     dataMat = []
@@ -39,7 +40,10 @@ def plotdataset():
 def sigmoid(x):
     return 1.0/(1+np.exp(-int(x)))
 def gradAscent(dataMatIn, classLabels):
-    #转换成numpy的mat
+    """
+    梯度上升算法
+
+    """
     dataMatrix = np.mat(dataMatIn)
     labelMat = np.mat(classLabels).transpose()
     m, n = np.shape(dataMatrix)
@@ -51,10 +55,24 @@ def gradAscent(dataMatIn, classLabels):
         error = labelMat - h
         weights = weights + alpha * dataMatrix.transpose() * error
     return weights.getA()
-
+def randGradAscent1(dataMatrix, classLabels, numIter=150):
+    m,n = np.shape(dataMatrix)
+    weights = np.ones(n)
+    for j in range(numIter):
+        dataIndex = list(range(m))
+        for i in range(m):
+            # 学习率是随机的
+            alpha = 4/(1.0+j+i)+0.01
+            # 不选取所有样本，随机选择
+            randIndex = int(random.uniform(0,len(dataIndex)))
+            h = sigmoid(np.sum(dataMatrix[randIndex]*weights))
+            error = classLabels[randIndex] - h
+            weights = weights + alpha * error * dataMatrix[randIndex]
+            del(dataIndex[randIndex])
+    return weights
 if __name__ == '__main__':
-    plotdataset()
-
+    data,label = loaddata()
+    print(randGradAscent1(np.array(data),label))
 
 
 
