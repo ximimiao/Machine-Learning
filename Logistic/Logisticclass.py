@@ -38,7 +38,7 @@ def plotdataset():
     plt.show()
 
 def sigmoid(x):
-    return 1.0/(1+np.exp(-int(x)))
+    return 1.0/(1+np.exp(-x))
 def gradAscent(dataMatIn, classLabels):
     """
     梯度上升算法
